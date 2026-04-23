@@ -10,8 +10,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY app/             ./app/
-COPY model_artifacts/ ./model_artifacts/
+COPY app/ ./app/
 
 # Give ownership to non-root user
 RUN chown -R appuser:appgroup /app
