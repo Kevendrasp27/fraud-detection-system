@@ -1,0 +1,36 @@
+{
+  "family": "fraud-detection-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::652253416930:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::652253416930:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "fraud-detection-app",
+      "image": "652253416930.dkr.ecr.ap-south-1.amazonaws.com/fraud-detection-app:latest",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "S3_BUCKET",    "value": "fraud-detection-model-652253416930" },
+        { "name": "S3_MODEL_KEY", "value": "model_artifacts/model.joblib" },
+        { "name": "AWS_REGION",   "value": "ap-south-1" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group":         "/ecs/fraud-detection",
+          "awslogs-region":        "ap-south-1",
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group":  "true"
+        }
+      },
+      "essential": true
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="wrapper">
+        <header class="header">
+            <div class="shield-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z" fill="currentColor"/>
+                    <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>Fraud Detection</h1>
+            <p class="subtitle">Real-time ML-powered transaction analysis</p>
+        </header>
+
+        <div class="card">
+            <form id="prediction-form" novalidate>
+                <div class="form-grid">
+
+                    <div class="input-group full-width">
+                        <span class="input-icon">$</span>
+                        <input type="number" id="amount" step="0.01" min="0.01" placeholder=" " required>
+                        <label for="amount">Transaction Amount</label>
+                    </div>
+
+                    <p class="section-label">Sender Account</p>
+
+                    <div class="input-group">
+                        <span class="input-icon">↑</span>
+                        <input type="number" id="oldbalanceOrg" step="0.01" min="0" placeholder=" " required>
+                        <label for="oldbalanceOrg">Balance Before</label>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-icon">↓</span>
+                        <input type="number" id="newbalanceOrig" step="0.01" min="0" placeholder=" " required>
+                        <label for="newbalanceOrig">Balance After</label>
+                    </div>
+
+                    <p class="section-label">Receiver Account</p>
+
+                    <div class="input-group">
+                        <span class="input-icon">↑</span>
+                        <input type="number" id="oldbalanceDest" step="0.01" min="0" placeholder=" " required>
+                        <label for="oldbalanceDest">Balance Before</label>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-icon">↓</span>
+                        <input type="number" id="newbalanceDest" step="0.01" min="0" placeholder=" " required>
+                        <label for="newbalanceDest">Balance After</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn">
+                    <span class="btn-text">Analyze Transaction</span>
+                    <div class="btn-loader hidden"><div class="spinner"></div></div>
+                </button>
+            </form>
+
+            <div id="result-card" class="result-card hidden">
+                <div class="result-icon">
+                    <svg class="icon-fraud hidden" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 7v5M12 16h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <svg class="icon-safe hidden" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <div class="result-label" id="result-label"></div>
+                <div class="result-sublabel" id="result-sublabel"></div>
+
+                <div class="confidence-section">
+                    <div class="confidence-header">
+                        <span class="confidence-label">Fraud Probability</span>
+                        <span class="confidence-value" id="confidence-value">0%</span>
+                    </div>
+                    <div class="confidence-bar-track">
+                        <div class="confidence-bar" id="confidence-bar"></div>
+                    </div>
+                </div>
+
+                <div class="result-factors" id="result-factors"></div>
+            </div>
+        </div>
+
+        <div class="api-status">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-text">Connecting to API…</span>
+        </div>
+
+        <footer class="footer">Made by KEVENDRA SINGH PARIHAR</footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+
+  # ── 1. FastAPI Backend ──────────────────────────────────────
+  app:
+    build: .
+    container_name: fraud-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./model_artifacts:/app/model_artifacts   # model survives rebuilds
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - fraud-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── 2. MLflow Tracking Server ───────────────────────────────
+  mlflow:
+    build: .
+    container_name: fraud-mlflow
+    user: root
+    command: >
+      mlflow server
+      --backend-store-uri sqlite:////mlflow-data/mlflow.db
+      --default-artifact-root /mlflow-data/mlruns
+      --host 0.0.0.0
+      --port 5000
+    ports:
+      - "5001:5000"
+    volumes:
+      - mlflow-data:/mlflow-data
+    networks:
+      - fraud-net
+    restart: unless-stopped
+
+  # ── 3. Frontend (nginx) ─────────────────────────────────────
+  frontend:
+    image: nginx:alpine
+    container_name: fraud-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro      # serve static files
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - fraud-net
+    restart: unless-stopped
+    depends_on:
+      - app
+
+# ── Volumes ─────────────────────────────────────────────────
+volumes:
+  mlflow-data:
+
+# ── Network ─────────────────────────────────────────────────
+networks:
+  fraud-net:
+    driver: bridge

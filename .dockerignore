@@ -1,0 +1,15 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+mlflow.db
+mlruns/
+data/
+model/
+frontend/
+nginx.conf
+docker-compose.yml
+*.md
