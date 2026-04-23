@@ -65,6 +65,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Show Dockerfile being used
+        run: cat Dockerfile
+
       - name: Build, tag and push Docker image to ECR
         id: build-image
         env:
